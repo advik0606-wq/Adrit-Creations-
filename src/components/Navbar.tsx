@@ -15,6 +15,7 @@ interface NavbarProps {
   currentUser: User | null;
   onGoogleSignIn: () => void;
   onLogout: () => void;
+  onOpenAuthModal?: () => void;
   isAuthenticating: boolean;
   reviewsCount?: number;
 }
@@ -29,6 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
   onGoogleSignIn,
   onLogout,
+  onOpenAuthModal,
   isAuthenticating,
   reviewsCount = 0,
 }) => {
@@ -59,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="bg-gradient-to-r from-rose-600 via-amber-500 to-emerald-600 text-white text-xs py-1.5 px-4 text-center shadow-xs flex items-center justify-center gap-2">
         <Sparkles className="w-3.5 h-3.5 text-yellow-200 animate-pulse" />
         <span className="font-semibold tracking-wide">
-          100% Belgian Cocoa Butter &bull; Fresh Small Batches &bull; Order Directly With Sunita (Mom)
+          Handmade Chocolates & Crochet Boutique &bull; 4 Signature Flavours &bull; Direct With Sunita (Mom)
         </span>
         <span className="hidden md:inline-block text-yellow-200 font-bold">
           &bull; Phone / WhatsApp: {SELLER_PHONE}
@@ -91,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onNavigate('catalog')}
               className="hover:text-rose-600 transition-colors py-1 cursor-pointer"
             >
-              All Chocolates
+              Chocolates & Crochet
             </button>
             <button
               onClick={() => onNavigate('story')}
@@ -174,6 +176,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <img
                       src={currentUser.photoURL}
                       alt={currentUser.displayName || 'User Profile'}
+                      referrerPolicy="no-referrer"
                       className="w-6 h-6 rounded-full border border-rose-300 object-cover"
                     />
                   ) : (
@@ -243,6 +246,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <button
                         onClick={() => {
                           setIsProfileDropdownOpen(false);
+                          if (onOpenAuthModal) onOpenAuthModal();
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-semibold text-rose-950 hover:bg-rose-50 rounded-xl flex items-center gap-2 cursor-pointer transition-colors"
+                      >
+                        <UserIcon className="w-3.5 h-3.5 text-rose-600" />
+                        <span>Firebase Account Details</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setIsProfileDropdownOpen(false);
                           onLogout();
                         }}
                         className="w-full text-left px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-xl flex items-center gap-2 cursor-pointer transition-colors pt-2 border-t border-rose-100 mt-1"
@@ -256,18 +270,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             ) : (
               <button
-                onClick={onGoogleSignIn}
+                onClick={() => {
+                  if (onOpenAuthModal) onOpenAuthModal();
+                  else onGoogleSignIn();
+                }}
                 disabled={isAuthenticating}
-                className="hidden sm:inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-full bg-white text-[#2a160d] hover:bg-rose-50 border border-rose-200 transition-all disabled:opacity-50 shadow-xs cursor-pointer"
-                title="Sign in with Google"
+                className="inline-flex items-center gap-2 text-xs font-semibold px-3.5 py-2 rounded-full bg-white text-[#2a160d] hover:bg-rose-50 border border-rose-200 transition-all disabled:opacity-50 shadow-xs cursor-pointer"
+                title="Sign in with Firebase (Email, Google or Guest)"
               >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 48 48">
-                  <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-                  <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-                  <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-                  <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-                </svg>
-                <span>{isAuthenticating ? 'Connecting...' : 'Sign in'}</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Sign In / Register</span>
               </button>
             )}
 
@@ -319,7 +331,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="text-left py-2 hover:text-rose-600 cursor-pointer"
             >
-              Complete Chocolate Catalog
+              Chocolates & Crochet Boutique
             </button>
             <button
               onClick={() => {
@@ -385,12 +397,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             {!currentUser && (
               <button
                 onClick={() => {
-                  onGoogleSignIn();
                   setIsMobileMenuOpen(false);
+                  if (onOpenAuthModal) onOpenAuthModal();
+                  else onGoogleSignIn();
                 }}
-                className="w-full py-2.5 mt-2 rounded-xl border border-rose-200 text-[#2a160d] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer bg-white"
+                className="w-full py-2.5 mt-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md"
               >
-                <span>Sign in with Google</span>
+                <UserIcon className="w-3.5 h-3.5" />
+                <span>Sign In / Register with Firebase</span>
               </button>
             )}
           </div>

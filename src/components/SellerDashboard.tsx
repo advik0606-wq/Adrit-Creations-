@@ -20,6 +20,7 @@ interface SellerDashboardProps {
   onGoogleSignIn: () => void;
   onOpenMyOrders?: () => void;
   onUpdateOrder?: (updatedOrder: Order) => void;
+  onOpenAuthModal?: () => void;
 }
 
 export const SellerDashboard: React.FC<SellerDashboardProps> = ({
@@ -33,6 +34,7 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
   onGoogleSignIn,
   onOpenMyOrders,
   onUpdateOrder,
+  onOpenAuthModal,
 }) => {
   const isSeller = currentUser?.email?.toLowerCase().trim() === SELLER_EMAIL.toLowerCase().trim();
 
@@ -75,10 +77,13 @@ export const SellerDashboard: React.FC<SellerDashboardProps> = ({
             )}
             <div className="flex flex-col sm:flex-row gap-2">
               <button
-                onClick={onGoogleSignIn}
+                onClick={() => {
+                  if (onOpenAuthModal) onOpenAuthModal();
+                  else onGoogleSignIn();
+                }}
                 className="flex-1 py-2.5 px-4 rounded-2xl bg-amber-50 text-amber-900 border border-amber-200 text-xs font-bold hover:bg-amber-100 cursor-pointer"
               >
-                Sign in as {SELLER_EMAIL}
+                Sign in with Firebase ({SELLER_EMAIL})
               </button>
               <button
                 onClick={onClose}

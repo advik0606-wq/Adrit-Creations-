@@ -14,9 +14,10 @@ export const MomsStory: React.FC = () => {
               
               <div className="relative rounded-3xl overflow-hidden border-2 border-rose-200 bg-white shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=900&q=80"
-                  alt="Handcrafting pure Belgian couverture chocolates"
-                  className="w-full h-96 object-cover object-center filter saturate-110"
+                  src="/src/assets/images/potli_sunflower_bag_1792331238306.jpg"
+                  alt="Sunita handcrafting 100% handmade crochet creations and chocolates in her workshop"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-80 sm:h-96 object-cover object-center filter saturate-110"
                 />
                 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -66,7 +67,10 @@ export const MomsStory: React.FC = () => {
                 Sunita noticed that most commercial supermarket chocolates are loaded with hydrogenated vegetable fats, artificial emulsifiers, and sit on warehouse shelves for months. She wanted to give people real, fresh, honest chocolate—the kind that melts cleanly on the palate because it uses <strong className="text-rose-900 font-bold">100% pure cocoa butter</strong> and real fresh cream.
               </p>
               <p>
-                Every chocolate is prepared in small batches of no more than 20 boxes at a time. The couverture is hand-tempered on marble surfaces to achieve that mirror-shine finish and crisp snap that true chocolate connoisseurs adore.
+                Every chocolate is prepared in small batches of no more than 20 boxes at a time, featuring our 4 signature recipes: intense 70% Dark Chocolate, roasted green Pista (Pistachio), golden caramelized Pineapple, and velvety Strawberry White Chocolate.
+              </p>
+              <p>
+                Beyond her confectionery, Sunita also hand-knits delicate crochet art—creating sunny sunflower potli bags, floral hair pins, cherry bell bag charms, and keychains with soft cotton milk yarn. It’s the heartwarming personal touch that turns every Adrit Creations package into an unforgettable heirloom gift.
               </p>
             </div>
 

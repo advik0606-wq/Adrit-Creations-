@@ -104,6 +104,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <img
                   src={item.chocolate.image}
                   alt={item.chocolate.name}
+                  referrerPolicy="no-referrer"
                   className="w-16 h-16 rounded-xl object-cover shrink-0 border border-rose-200"
                 />
 

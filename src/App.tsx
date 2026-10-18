@@ -11,6 +11,7 @@ import { ReviewsSection } from './components/ReviewsSection';
 import { MomsStory } from './components/MomsStory';
 import { SellerDashboard } from './components/SellerDashboard';
 import { MyOrdersModal } from './components/MyOrdersModal';
+import { FirebaseAuthModal } from './components/FirebaseAuthModal';
 import { Footer } from './components/Footer';
 
 import { CHOCOLATES } from './data/chocolatesData';
@@ -67,6 +68,22 @@ export default function App() {
     }
   }, [orders]);
 
+  // Synchronize orders across browser tabs/windows and backend updates
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'adrit_orders_v2' && e.newValue) {
+        try {
+          const fresh = JSON.parse(e.newValue);
+          setOrders(fresh);
+        } catch (err) {
+          console.warn('Orders storage sync error:', err);
+        }
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
   // Cart State
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -80,6 +97,7 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
   const [isSellerPortalOpen, setIsSellerPortalOpen] = useState<boolean>(false);
   const [isMyOrdersOpen, setIsMyOrdersOpen] = useState<boolean>(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
   // Floating Toast State
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -207,16 +225,46 @@ export default function App() {
 
   // Order Management: update status
   const handleUpdateOrderStatus = (orderId: string, newStatus: OrderStatus) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
-    );
+    setOrders((prev) => {
+      const updated = prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o));
+      try {
+        localStorage.setItem('adrit_orders_v2', JSON.stringify(updated));
+      } catch (e) {
+        console.warn('Storage error:', e);
+      }
+      window.dispatchEvent(
+        new CustomEvent('adrit_order_status_changed', {
+          detail: {
+            orderId,
+            newStatus,
+            order: updated.find((o) => o.id === orderId),
+          },
+        })
+      );
+      return updated;
+    });
     showToast(`Order #${orderId} marked as ${newStatus.toUpperCase()}`);
   };
 
   const handleUpdateOrder = (updatedOrder: Order) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o))
-    );
+    setOrders((prev) => {
+      const updated = prev.map((o) => (o.id === updatedOrder.id ? updatedOrder : o));
+      try {
+        localStorage.setItem('adrit_orders_v2', JSON.stringify(updated));
+      } catch (e) {
+        console.warn('Storage error:', e);
+      }
+      window.dispatchEvent(
+        new CustomEvent('adrit_order_status_changed', {
+          detail: {
+            orderId: updatedOrder.id,
+            newStatus: updatedOrder.status,
+            order: updatedOrder,
+          },
+        })
+      );
+      return updated;
+    });
   };
 
   const handleAddReview = (newReview: CustomerReview) => {
@@ -253,6 +301,7 @@ export default function App() {
         currentUser={currentUser}
         onGoogleSignIn={handleGoogleSignIn}
         onLogout={handleLogout}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
         isAuthenticating={isAuthenticating}
         reviewsCount={reviews.length}
       />
@@ -442,6 +491,8 @@ export default function App() {
         currentUser={currentUser}
         onGoogleSignIn={handleGoogleSignIn}
         onLogout={handleLogout}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
+        onUpdateOrderStatus={handleUpdateOrderStatus}
       />
 
       {/* Seller Portal: Order Management System & Inventory (STRICTLY OWNER ONLY) */}
@@ -455,9 +506,29 @@ export default function App() {
         onUpdateStock={handleUpdateStock}
         currentUser={currentUser}
         onGoogleSignIn={handleGoogleSignIn}
+        onOpenAuthModal={() => setIsAuthModalOpen(true)}
         onOpenMyOrders={() => {
           setIsSellerPortalOpen(false);
           setIsMyOrdersOpen(true);
+        }}
+      />
+
+      {/* Firebase Authentication Modal (Email/Password, Register, Reset & Google) */}
+      <FirebaseAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        currentUser={currentUser}
+        onAuthSuccess={(user) => {
+          setCurrentUser(user);
+          showToast(`Signed in as ${user.displayName || user.email}!`);
+        }}
+        onOpenMyOrders={() => {
+          setIsAuthModalOpen(false);
+          setIsMyOrdersOpen(true);
+        }}
+        onOpenSellerPortal={() => {
+          setIsAuthModalOpen(false);
+          setIsSellerPortalOpen(true);
         }}
       />
 

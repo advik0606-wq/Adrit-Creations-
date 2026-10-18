@@ -54,6 +54,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   src={chocolate.image}
                   alt={chocolate.name}
                   className="w-full h-full object-cover filter saturate-110"
+                  referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
 
@@ -63,18 +64,41 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                       {chocolate.badge}
                     </span>
                   )}
-                  <span className="bg-white/95 backdrop-blur-sm text-amber-900 text-[11px] font-bold px-3 py-1 rounded-full border border-amber-200 shadow-xs">
-                    {chocolate.cocoaPercentage}% Belgian Cocoa
-                  </span>
+                  {chocolate.productType === 'crochet' ? (
+                    <span className="bg-gradient-to-r from-amber-600 to-rose-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+                      🧶 100% Handmade
+                    </span>
+                  ) : chocolate.cocoaPercentage > 0 ? (
+                    <span className="bg-white/95 backdrop-blur-sm text-amber-900 text-[11px] font-bold px-3 py-1 rounded-full border border-amber-200 shadow-xs">
+                      {chocolate.cocoaPercentage}% Belgian Cocoa
+                    </span>
+                  ) : (
+                    <span className="bg-white/95 backdrop-blur-sm text-rose-900 text-[11px] font-bold px-3 py-1 rounded-full border border-rose-200 shadow-xs">
+                      Artisan Confectionery
+                    </span>
+                  )}
                 </div>
 
                 <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-[#2a160d] bg-white/95 backdrop-blur-md px-3 py-2 rounded-xl border border-rose-200 shadow-sm">
-                  <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 100% Cocoa Butter
-                  </span>
-                  <span className="text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200">
-                    Eggless Recipe
-                  </span>
+                  {chocolate.productType === 'crochet' ? (
+                    <>
+                      <span className="flex items-center gap-1.5 text-amber-900 font-bold">
+                        <CheckCircle2 className="w-4 h-4 text-amber-600" /> 100% Handcrafted
+                      </span>
+                      <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200 text-[11px]">
+                        Zero Plastic &bull; Washable
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 100% Cocoa Butter
+                      </span>
+                      <span className="text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200">
+                        Eggless Recipe
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -113,14 +137,30 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   {chocolate.tagline}
                 </p>
 
+                {chocolate.mouldShape && (
+                  <div className="mt-3 p-3 bg-gradient-to-r from-amber-50 to-rose-50 border border-amber-200/90 rounded-2xl flex items-center justify-between text-xs shadow-xs">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span className="text-[#3b2114]">
+                        Mould Shape: <strong className="font-bold text-rose-950">{chocolate.mouldShape}</strong>
+                      </span>
+                    </div>
+                    {chocolate.mouldType && (
+                      <span className="text-[10px] bg-white border border-rose-200 text-rose-800 font-bold px-2.5 py-0.5 rounded-full">
+                        {chocolate.mouldType}
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 <p className="text-xs sm:text-sm text-[#5a3825] mt-3 leading-relaxed">
                   {chocolate.description}
                 </p>
 
-                {/* Pure Kitchen Ingredients */}
+                {/* Pure Kitchen Ingredients or Crochet Materials */}
                 <div className="mt-4">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-rose-900 mb-2">
-                    Pure Kitchen Ingredients:
+                    {chocolate.productType === 'crochet' ? 'Craft Materials & Yarn Details:' : 'Pure Kitchen Ingredients:'}
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {chocolate.ingredients.map((ing) => (
@@ -134,10 +174,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                   </div>
                 </div>
 
-                {/* Dietary Tags */}
+                {/* Dietary Tags or Craft Assurances */}
                 <div className="mt-4">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-900 mb-2">
-                    Dietary Assurances:
+                    {chocolate.productType === 'crochet' ? 'Craft Assurances:' : 'Dietary Assurances:'}
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {chocolate.dietary.map((d) => (
@@ -152,10 +192,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 </div>
               </div>
 
-              {/* Box Size Options Selection */}
+              {/* Box Size / Pack Options Selection */}
               <div className="space-y-3 pt-3 border-t border-rose-100">
                 <label className="block text-xs font-bold text-[#7c5c47]">
-                  Select Box Size & Price:
+                  {chocolate.productType === 'crochet' ? 'Select Option / Pack Size & Price:' : 'Select Box Size & Price:'}
                 </label>
                 <div className="space-y-2">
                   {chocolate.boxOptions.map((opt) => (

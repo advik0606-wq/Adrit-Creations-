@@ -1,9 +1,13 @@
 export type Category = 
   | 'all'
+  | 'crochet'
+  | 'dark'
+  | 'pista'
+  | 'pineapple'
+  | 'strawberry'
+  | 'hampers'
   | 'truffles'
   | 'nuts'
-  | 'hampers'
-  | 'dark'
   | 'bonbons'
   | 'sugarfree';
 
@@ -19,7 +23,17 @@ export interface Chocolate {
   name: string;
   tagline: string;
   description: string;
-  category: 'truffles' | 'nuts' | 'hampers' | 'dark' | 'bonbons' | 'sugarfree';
+  category: 'truffles' | 'nuts' | 'hampers' | 'dark' | 'bonbons' | 'sugarfree' | 'crochet';
+  productType?: 'chocolate' | 'crochet';
+  flavour?: 'dark' | 'pista' | 'pineapple' | 'strawberry-white' | 'assorted' | 'none';
+  mouldShape?: string;
+  mouldType?: string;
+  crochetDetails?: {
+    yarnType?: string;
+    colors?: string[];
+    dimensions?: string;
+    handmadeBy?: string;
+  };
   basePrice: number;
   boxOptions: BoxOption[];
   cocoaPercentage: number;

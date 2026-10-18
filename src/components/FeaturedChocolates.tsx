@@ -108,6 +108,7 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
                   src={current.image}
                   alt={current.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
 
@@ -116,18 +117,30 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
                   <span className="bg-gradient-to-r from-rose-600 to-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
                     {current.badge || 'Featured Batch'}
                   </span>
-                  <span className="bg-white/95 backdrop-blur-md text-amber-900 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-amber-200 shadow-xs">
-                    {current.cocoaPercentage}% Cocoa
-                  </span>
+                  {current.productType === 'crochet' ? (
+                    <span className="bg-gradient-to-r from-amber-600 to-rose-600 text-white text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1 border border-amber-200">
+                      🧶 100% Handmade
+                    </span>
+                  ) : current.cocoaPercentage > 0 ? (
+                    <span className="bg-white/95 backdrop-blur-md text-amber-900 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-amber-200 shadow-xs">
+                      {current.cocoaPercentage}% Cocoa
+                    </span>
+                  ) : null}
                 </div>
 
                 {/* Stock Level Warning */}
                 <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-emerald-200 rounded-xl px-3 py-2 flex items-center justify-between text-xs shadow-sm">
-                  <span className="text-[#059669] flex items-center gap-1.5 font-bold">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> 100% Cocoa Butter
-                  </span>
+                  {current.productType === 'crochet' ? (
+                    <span className="text-amber-900 flex items-center gap-1.5 font-bold">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-amber-600" /> 100% Handmade Cotton Yarn
+                    </span>
+                  ) : (
+                    <span className="text-[#059669] flex items-center gap-1.5 font-bold">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> 100% Cocoa Butter
+                    </span>
+                  )}
                   <span className="text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-lg border border-rose-200">
-                    Stock: {current.stock} boxes
+                    Stock: {current.stock}
                   </span>
                 </div>
               </div>
@@ -155,8 +168,20 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
                   {current.tagline}
                 </p>
 
+                {current.mouldShape && (
+                  <div className="mt-2.5 inline-flex items-center gap-2 text-xs bg-gradient-to-r from-amber-50 to-rose-50 border border-amber-200 px-3 py-1 rounded-xl text-amber-950 font-semibold shadow-xs">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Mould Shape: <strong className="font-bold text-rose-900">{current.mouldShape}</strong></span>
+                    {current.mouldType && (
+                      <span className="text-[10px] bg-white border border-rose-200 text-rose-800 font-bold px-2 py-0.5 rounded-full ml-1">
+                        {current.mouldType}
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 {current.featuredHighlight && (
-                  <p className="text-xs text-[#92400e] bg-gradient-to-r from-[#fef3c7] to-[#fff1f2] border border-[#fde68a] px-3.5 py-1.5 rounded-xl inline-block mt-3 font-bold shadow-xs">
+                  <p className="text-xs text-[#92400e] bg-gradient-to-r from-[#fef3c7] to-[#fff1f2] border border-[#fde68a] px-3.5 py-1.5 rounded-xl block mt-2.5 font-bold shadow-xs">
                     ✨ {current.featuredHighlight}
                   </p>
                 )}
@@ -179,7 +204,7 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
               </div>
 
               {/* Pricing & Order Actions */}
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-[#fbcfe8]">
+              <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#fbcfe8]">
                 <div>
                   <span className="text-xs text-[#7c5c47] font-semibold block">
                     Price ({popularBox.label}):
@@ -194,10 +219,10 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                   <button
                     onClick={() => onQuickOrder(current, popularBox)}
-                    className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-amber-600 to-rose-700 text-white text-xs sm:text-sm font-bold hover:opacity-95 shadow-md shadow-rose-600/25 flex items-center gap-2 cursor-pointer transition-all transform active:scale-95"
+                    className="flex-1 sm:flex-none px-5 sm:px-6 py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 via-amber-600 to-rose-700 text-white text-xs sm:text-sm font-bold hover:opacity-95 shadow-md shadow-rose-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all transform active:scale-95"
                   >
                     <Sparkles className="w-4 h-4 text-amber-200" />
                     <span>Order Now</span>
@@ -205,7 +230,7 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
 
                   <button
                     onClick={() => onAddToCart(current, popularBox)}
-                    className="px-5 py-3.5 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-900 text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer transition-colors shadow-xs"
+                    className="flex-1 sm:flex-none px-4 sm:px-5 py-3 sm:py-3.5 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-900 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors shadow-xs"
                   >
                     <ShoppingBag className="w-4 h-4 text-rose-600" />
                     <span>Add to Cart</span>
@@ -213,7 +238,7 @@ export const FeaturedChocolates: React.FC<FeaturedChocolatesProps> = ({
 
                   <button
                     onClick={() => onSelectChocolate(current)}
-                    className="text-xs text-rose-700 hover:text-rose-900 underline underline-offset-4 font-bold transition-colors cursor-pointer"
+                    className="text-xs text-rose-700 hover:text-rose-900 underline underline-offset-4 font-bold transition-colors cursor-pointer px-2 py-1"
                   >
                     Details
                   </button>
