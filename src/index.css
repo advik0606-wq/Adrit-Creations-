@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #fdfaf6;
+    color: #2c180e;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-brand {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+/* Colorful confectionery scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fdf2f8;
+}
+::-webkit-scrollbar-thumb {
+  background: #f472b6;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #db2777;
+}
+
+/* Soft colorful radial mesh backgrounds */
+.bg-colorful-mesh {
+  background-color: #fffdfa;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(254, 205, 211, 0.45) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(254, 240, 138, 0.4) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(187, 247, 208, 0.35) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(221, 214, 254, 0.4) 0px, transparent 50%);
+}
+
+.bg-colorful-hero {
+  background: linear-gradient(135deg, #fffbf5 0%, #fff1f2 30%, #fef3c7 70%, #f0fdf4 100%);
+}
+
+.bg-colorful-card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.bg-colorful-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px -8px rgba(180, 83, 9, 0.12), 0 8px 16px -4px rgba(225, 29, 72, 0.08);
+}
+
+/* Google Sign-In Material Button standard styles */
+.gsi-material-button {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-appearance: none;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #747775;
+  border-radius: 9999px;
+  box-sizing: border-box;
+  color: #1f1f1f;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 14px;
+  height: 42px;
+  letter-spacing: 0.25px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 16px;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: auto;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .2s, box-shadow .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.gsi-material-button:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  background-color: #f8f9fa;
+}
+
+.gsi-material-button:active {
+  background-color: #eeeeee;
+}
+
+.gsi-material-button-content-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 100%;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  gap: 10px;
+}
+
+.gsi-material-button-icon {
+  height: 20px;
+  min-width: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsi-material-button-contents {
+  font-weight: 500;
+  font-size: 14px;
+}

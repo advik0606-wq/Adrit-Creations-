@@ -1,0 +1,6 @@
+{
+  "name": "Adrit Creations - Artisanal Handcrafted Chocolates",
+  "description": "Handcrafted gourmet chocolates made with love. Browse our decadent collection, customize gift boxes, and place orders directly with the chocolatière.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
